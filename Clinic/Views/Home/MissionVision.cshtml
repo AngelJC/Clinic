@@ -1,10 +1,12 @@
-﻿@{
-    ViewData["Title"] = "Política de Privacidad";
+﻿@inject IOptions<Clinic.Data.ClientOptions> ClientOptions
+@{
+    var client = ClientOptions.Value;
+    ViewData["Title"] = "Misión y visión";
 }
 <div class="container my-5 py-5">
     <div class="row mb-5">
         <div class="col-12 text-center">
-            <h1 class="section-title display-4">El Alma de <span class="text-accent">LUX</span></h1>
+            <h1 class="section-title display-4">El Alma de <span class="text-accent">@client.Name</span></h1>
             <p class="section-subtitle lead">Nuestra razón de ser y el futuro que construimos para ti.</p>
         </div>
     </div>

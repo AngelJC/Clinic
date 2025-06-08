@@ -1,9 +1,15 @@
-﻿<!DOCTYPE html>
+﻿@inject IOptions<Clinic.Data.ClientOptions> ClientOptions
+@{
+    var client = ClientOptions.Value;
+    var nameSplit = client.NameSplit;
+}
+
+<!DOCTYPE html>
 <html lang="es-mx" class="h-100">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Clinica Lux</title>
+    <title>@ViewData["Title"] - @client.FullName</title>
 
     @* Roboto & Roboto Condensed from Google Fonts*@
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,10 +39,12 @@
                                 </defs>
                                 <!-- Texto -->
                                 <text x="30" y="32" font-family="Roboto Condensed" font-size="20" fill="#2D3748">
-                                    Clínica
-                                    <tspan font-weight="600">L</tspan>
-                                    <tspan font-weight="600">U</tspan>
-                                    <tspan font-weight="600" fill="url(#rayGradient)">X</tspan>
+                                    @client.Type
+                                    @for (int i = 0; i < nameSplit.Length - 1; i++)
+                                    {
+                                        <tspan font-weight="700">@nameSplit[i]</tspan>
+                                    }
+                                    <tspan font-weight="700" fill="url(#rayGradient)">@nameSplit[nameSplit.Length - 1]</tspan>
                                 </text>
                                 <line x1="123" y1="18" x2="137" y2="34" stroke="white" stroke-width="1.5" />
                             </svg>
@@ -48,7 +56,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
-                        
+
                         <partial name="_LoginPartial" />
                     </div>
                 </div>
@@ -59,7 +67,7 @@
         </main>
         <footer class="mt-auto bg-body-tertiary py-3">
             <div class="container">
-                &copy; 2025 - Clinica Lux - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                &copy; @DateTime.Now.Year - @client.FullName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Política de privacidad</a>
             </div>
         </footer>
     </div>

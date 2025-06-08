@@ -10,4 +10,17 @@
         public static readonly Guid ROL_PATIENT = new("{5eddbc38-93c9-435d-ad78-0ab9aff09e1b}");
         public static readonly Guid ROL_DOCTOR = new("{5d92aa99-2d3b-4b88-860c-1113aee974e3}");
     }
+
+    public class ClientOptions
+    {
+        public const string Client = "Client";
+
+        public string Type { get; set; } = "Clinic";
+        public string Name { get; set; } = "LUX";
+        public string Acronym { get; set; } = "LUX";
+
+        public string FullName => $"{Type} {Name}";
+
+        public char[] NameSplit => Name.PadLeft(3, ' ').ToCharArray();
+    }
 }

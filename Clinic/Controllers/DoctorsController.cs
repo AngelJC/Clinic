@@ -39,25 +39,7 @@ namespace Clinic.Controllers
                 .ThenBy(x => x.Name).ToListAsync());
         }
 
-        // GET: ApplicationUsers/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var applicationUser = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (applicationUser == null)
-            {
-                return NotFound();
-            }
-
-            return View(applicationUser);
-        }
-
-        // GET: ApplicationUsers/Create
+        // GET: Doctos/Create
         public async Task<IActionResult> Create()
         {
             var specialties = await _context.Specialty.AsNoTracking().Select(x => new
@@ -70,7 +52,7 @@ namespace Clinic.Controllers
             return View();
         }
 
-        // POST: ApplicationUsers/Create
+        // POST: Doctors/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -95,7 +77,7 @@ namespace Clinic.Controllers
                 {
                     await userManager.AddToRoleAsync(applicationUser, "Doctor");
                     await userManager.AddToRoleAsync(applicationUser, "ChangePassword");
-                    
+
                     // Save doctor details
                     var doctor = new Doctor
                     {
@@ -108,10 +90,17 @@ namespace Clinic.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var specialties = await _context.Specialty.AsNoTracking().Select(x => new
+            {
+                x.Id,
+                x.Name,
+            }).ToListAsync();
+
+            ViewBag.Specialties = new SelectList(specialties, "Id", "Name");
             return View(model);
         }
 
-        // GET: ApplicationUsers/Edit/5
+        // GET: Doctos/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -119,22 +108,41 @@ namespace Clinic.Controllers
                 return NotFound();
             }
 
-            var applicationUser = await _context.Users.FindAsync(id);
+            var applicationUser = await _context.Doctors
+                .Where(x => x.ApplicationUserId == id)
+                .Select(x => new DoctorEdit
+                {
+                    Id = x.ApplicationUserId,
+                    Name = x.ApplicationUser!.Name,
+                    PaternalSurname = x.ApplicationUser.PaternalSurname,
+                    MaternalSurname = x.ApplicationUser.MaternalSurname,
+                    PhoneNumber = x.ApplicationUser.PhoneNumber,
+                    Email = x.ApplicationUser.Email!,
+                    SpecialtyId = x.SpecialtyId,
+                    Status = x.ApplicationUser.Status
+                }).FirstOrDefaultAsync();
             if (applicationUser == null)
             {
                 return NotFound();
             }
+            var specialties = await _context.Specialty.AsNoTracking().Select(x => new
+            {
+                x.Id,
+                x.Name,
+            }).ToListAsync();
+
+            ViewBag.Specialties = new SelectList(specialties, "Id", "Name");
             return View(applicationUser);
         }
 
-        // POST: ApplicationUsers/Edit/5
+        // POST: Doctos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("CreationDate,Status,Name,PaternalSurname,MaternalSurname,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(Guid id, [Bind] DoctorEdit model)
         {
-            if (id != applicationUser.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
@@ -143,56 +151,47 @@ namespace Clinic.Controllers
             {
                 try
                 {
-                    _context.Update(applicationUser);
+                    var doctor = await _context.Doctors
+                        .Include(d => d.ApplicationUser)
+                        .FirstOrDefaultAsync(d => d.ApplicationUserId == id);
+
+                    if (doctor == null)
+                    {
+                        return NotFound();
+                    }
+
+                    doctor.ApplicationUser.Name = model.Name;
+                    doctor.ApplicationUser.PaternalSurname = model.PaternalSurname;
+                    doctor.ApplicationUser.MaternalSurname = model.MaternalSurname;
+                    doctor.ApplicationUser.PhoneNumber = model.PhoneNumber;
+                    doctor.ApplicationUser.Email = model.Email;
+                    doctor.SpecialtyId = model.SpecialtyId;
+                    doctor.ApplicationUser.Status = model.Status;
+
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!ApplicationUserExists(applicationUser.Id))
+                    if (!ApplicationUserExists(model.Id))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        _ = ex.Message;
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(applicationUser);
-        }
 
-        // GET: ApplicationUsers/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null)
+            var specialties = await _context.Specialty.AsNoTracking().Select(x => new
             {
-                return NotFound();
-            }
+                x.Id,
+                x.Name,
+            }).ToListAsync();
 
-            var applicationUser = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (applicationUser == null)
-            {
-                return NotFound();
-            }
-
-            return View(applicationUser);
-        }
-
-        // POST: ApplicationUsers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            var applicationUser = await _context.Users.FindAsync(id);
-            if (applicationUser != null)
-            {
-                _context.Users.Remove(applicationUser);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            ViewBag.Specialties = new SelectList(specialties, "Id", "Name");
+            return View(model);
         }
 
         private bool ApplicationUserExists(Guid id)

@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Clinic.Models.Catalogs;
+using Clinic.Models.Core;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Clinic.Models
 {
-    public class DoctorSlot
+    public class DoctorSlot : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; }
+        public StatusCore Status { get; set; }
 
         [Required]
         public Guid DoctorId { get; set; }

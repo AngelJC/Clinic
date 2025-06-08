@@ -1,12 +1,11 @@
 ﻿@model IEnumerable<Clinic.Models.Specialty>
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Listado de Especialidades";
 }
 <div class="container p-sm-4">
 
-    <h1>Listado de Especialidades</h1>
+    <h1>@ViewData["Title"]</h1>
 
     <p>
         <a asp-action="Create">Agregar</a>

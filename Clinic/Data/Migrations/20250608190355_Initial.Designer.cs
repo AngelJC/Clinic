@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinic.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250608090137_Initial")]
+    [Migration("20250608190355_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -324,6 +324,9 @@ namespace Clinic.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("char(36)");
 
@@ -335,6 +338,9 @@ namespace Clinic.Data.Migrations
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

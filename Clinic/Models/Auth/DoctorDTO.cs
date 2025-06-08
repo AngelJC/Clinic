@@ -72,4 +72,49 @@ namespace Clinic.Models.Auth
         [Display(Name = "Estado")]
         public StatusCore Status { get; set; } = StatusCore.Active;
     }
+
+    public class DoctorEdit
+    {
+        public Guid Id { get; set; }
+
+        [Display(Name = "Estado")]
+        public StatusCore Status { get; set; }
+
+        /// <summary>
+        /// Name of user
+        /// </summary>
+        [StringLength(50)]
+        [Required]
+        [Display(Name = "Nombre (s)")]
+        public string Name { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Paternal surname of user
+        /// </summary>
+        [StringLength(50)]
+        [Required]
+        [Display(Name = "Apellido paterno")]
+        public string PaternalSurname { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Maternal surname of user
+        /// </summary>
+        [StringLength(50)]
+        [Required]
+        [Display(Name = "Apellido materno")]
+        public string MaternalSurname { get; set; } = string.Empty;
+
+        [StringLength(50)]
+        [Display(Name = "Teléfono")]
+        public string? PhoneNumber { get; set; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Correo electrónico")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        [Display(Name = "Especialidad")]
+        public Guid SpecialtyId { get; set; }
+    }
 }

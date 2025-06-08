@@ -9,6 +9,11 @@ using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var clientOptions = builder.Configuration.GetSection(ClientOptions.Client)
+        .Get<ClientOptions>() ?? throw new InvalidCastException("'ClientOptions' not found");
+
+builder.Services.Configure<ClientOptions>(builder.Configuration.GetSection(ClientOptions.Client));
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 

@@ -1,5 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@inject IOptions<Clinic.Data.ClientOptions> ClientOptions
+@{
+    var client = ClientOptions.Value;
+    var email = $"contacto@{client.Acronym.ToLower()}.com";
+    ViewData["Title"] = "Página de inicio";
 }
 <!-- Hero Start -->
 <div class="container-fluid bg-primary py-5 mb-5 hero-header">
@@ -255,7 +258,7 @@
         <h4 class="d-inline-block text-accent text-uppercase border-bottom border-5 border-warning mb-4">Contáctenos</h4>
         <p class="mb-4">Nos encontramos en la ciudad de Puebla de los Ángeles, en el domicilio conocido</p>
         <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>Calle 123, Colonia Ejemplo, Puebla</p>
-        <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>clinicasLux@mail.com</p>
+        <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>@email</p>
         <p class="mb-0"><i class="fa fa-phone-alt text-primary me-3"></i>+52 223 123 123456</p>
     </div>
     <div class="col-md-6">

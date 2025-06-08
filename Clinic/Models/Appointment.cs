@@ -31,10 +31,6 @@ namespace Clinic.Models
         [Required]
         public Guid DoctorId { get; set; }
 
-        /// <summary>
-        /// The ID of the DoctorSlot that was selected for this appointment.
-        /// This creates the link that allows marking the slot as "unavailable".
-        /// </summary>
         [Required]
         public Guid SlotId { get; set; }
 
