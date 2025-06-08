@@ -18,6 +18,11 @@ namespace Clinic.Controllers
             return View();
         }
 
+        public IActionResult MissionVision()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

@@ -19,20 +19,44 @@
 <body class="d-flex h-100">
     <div class="d-flex w-100 h-100 mx-auto flex-column">
         <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow">
+            <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-light bg-light border-bottom box-shadow">
                 <div class="container">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Clinica Lux</a>
+
+                    <div class="logo-container flex flex-col items-center justify-center">
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                            <svg width="200" height="50" viewBox="0 0 200 50">
+                                <defs>
+                                    <linearGradient id="rayGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#F6E05E;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#D69E2E;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <!-- Texto -->
+                                <text x="30" y="32" font-family="Roboto Condensed" font-size="20" fill="#2D3748">
+                                    Clínica
+                                    <tspan font-weight="600">L</tspan>
+                                    <tspan font-weight="600">U</tspan>
+                                    <tspan font-weight="600" fill="url(#rayGradient)">X</tspan>
+                                </text>
+                                <line x1="123" y1="18" x2="137" y2="34" stroke="white" stroke-width="1.5" />
+                            </svg>
+                        </a>
+                    </div>
+
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MissionVision">Misión y Visión</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
                             </li>
                         </ul>
                         <partial name="_LoginPartial" />
@@ -40,7 +64,7 @@
                 </div>
             </nav>
         </header>
-        <main role="main" class="container h-100 bg-body shadow">
+        <main role="main" class="container bg-body shadow main">
             @RenderBody()
         </main>
         <footer class="mt-auto bg-body-tertiary py-3">
