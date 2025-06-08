@@ -50,14 +50,14 @@ namespace Clinic.Data
                 await context.Roles.AddRangeAsync(new List<ApplicationRole> {
                     new() {
                         Id = Shared.ROL_CHANGE_PASSWORD_ID,
-                        Status = StatusCore.Inactive,
+                        Status = StatusCore.Active,
                         Name = "ChangePassword",
                         NormalizedName = "CHANGEPASSWORD",
                         Description = "Requiere cambio de contraseña"
                     },
                     new() {
                         Id = Shared.ROL_SUDO_ID,
-                        Status = StatusCore.Deleted,
+                        Status = StatusCore.Active,
                         Name = "Sudo",
                         NormalizedName = "SUDO",
                         Description = "Administrador"

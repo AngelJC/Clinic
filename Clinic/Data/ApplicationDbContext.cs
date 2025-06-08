@@ -108,6 +108,10 @@ namespace Clinic.Data
                 property.SetScale(2);
             }
         }
-        public DbSet<Clinic.Models.Specialty> Specialty { get; set; } = default!;
+        public DbSet<Specialty> Specialty { get; set; } = default!;
+        public DbSet<Doctor> Doctors { get; set; } = default!;
+        public DbSet<Patient> Patients { get; set; } = default!;
+        public DbSet<Appointment> Appointments { get; set; } = default!;
+        public DbSet<DoctorSlot> DoctorSlots { get; set; } = default!;
     }
 }

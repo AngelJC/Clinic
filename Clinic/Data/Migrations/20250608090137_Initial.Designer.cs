@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinic.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250608083820_Initial")]
+    [Migration("20250608090137_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -71,7 +71,7 @@ namespace Clinic.Data.Migrations
 
                     b.HasIndex("SlotId");
 
-                    b.ToTable("Appointment");
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("Clinic.Models.Auth.ApplicationRole", b =>
@@ -315,7 +315,7 @@ namespace Clinic.Data.Migrations
 
                     b.HasIndex("SpecialtyId");
 
-                    b.ToTable("Doctor");
+                    b.ToTable("Doctors");
                 });
 
             modelBuilder.Entity("Clinic.Models.DoctorSlot", b =>
@@ -340,7 +340,7 @@ namespace Clinic.Data.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorSlot");
+                    b.ToTable("DoctorSlots");
                 });
 
             modelBuilder.Entity("Clinic.Models.Patient", b =>
@@ -355,7 +355,7 @@ namespace Clinic.Data.Migrations
 
                     b.HasKey("ApplicationUserId");
 
-                    b.ToTable("Patient");
+                    b.ToTable("Patients");
                 });
 
             modelBuilder.Entity("Clinic.Models.Specialty", b =>
