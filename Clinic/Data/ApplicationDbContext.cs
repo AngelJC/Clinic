@@ -1,6 +1,7 @@
 ﻿using Clinic.Models.Auth;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Clinic.Models;
 
 namespace Clinic.Data
 {
@@ -107,5 +108,6 @@ namespace Clinic.Data
                 property.SetScale(2);
             }
         }
+        public DbSet<Clinic.Models.Specialty> Specialty { get; set; } = default!;
     }
 }

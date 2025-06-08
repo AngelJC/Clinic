@@ -69,6 +69,13 @@ namespace Clinic.Data
                         NormalizedName = "PATIENT",
                         Description = "Paciente"
                     },
+                    new() {
+                        Id = Shared.ROL_DOCTOR,
+                        Status = StatusCore.Active,
+                        Name = "Doctor",
+                        NormalizedName = "DOCTOR",
+                        Description = "Doctor"
+                    },
                 });
                 await context.SaveChangesAsync();
             }
@@ -95,6 +102,31 @@ namespace Clinic.Data
                 };
 
                 await userManager.CreateAsync(user1, "123qweasd!Sudo");
+            }
+        }
+
+
+        public static async Task AddDoctors(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        {
+            if (!await context.Users.AnyAsync())
+            {
+                var user1 = new ApplicationUser
+                {
+                    Id = Shared.BASE_GUID_1,
+                    Name = "Alejandro",
+                    PaternalSurname = "Cervantes",
+                    MaternalSurname = "Márquez",
+                    Email = "alejandro@lux.com",
+                    UserName = "alejandro@lux.com",
+                    PhoneNumber = "",
+                    CreationDate = DateTime.Now,
+                    UserRoles =
+                    [
+                        new ApplicationUserRole{ RoleId = Shared.ROL_DOCTOR }
+                    ]
+                };
+
+                await userManager.CreateAsync(user1, "123qweasd!Alejandro");
             }
         }
 

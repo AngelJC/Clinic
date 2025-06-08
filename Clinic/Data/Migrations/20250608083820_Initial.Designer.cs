@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinic.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250608022117_Initial")]
+    [Migration("20250608083820_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,6 +24,55 @@ namespace Clinic.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("Clinic.Models.Appointment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("AdministrativeNotes")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("AppointmentDateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ReasonForVisit")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<Guid>("SlotId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TrackingId")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("PatientId");
+
+                    b.HasIndex("SlotId");
+
+                    b.ToTable("Appointment");
+                });
 
             modelBuilder.Entity("Clinic.Models.Auth.ApplicationRole", b =>
                 {
@@ -249,6 +298,125 @@ namespace Clinic.Data.Migrations
                     b.ToTable("Identity_UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Clinic.Models.Doctor", b =>
+                {
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ProfessionalLicense")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<Guid>("SpecialtyId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("ApplicationUserId");
+
+                    b.HasIndex("SpecialtyId");
+
+                    b.ToTable("Doctor");
+                });
+
+            modelBuilder.Entity("Clinic.Models.DoctorSlot", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsBooked")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("DoctorSlot");
+                });
+
+            modelBuilder.Entity("Clinic.Models.Patient", b =>
+                {
+                    b.Property<Guid>("ApplicationUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("ApplicationUserId");
+
+                    b.ToTable("Patient");
+                });
+
+            modelBuilder.Entity("Clinic.Models.Specialty", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("varchar(2)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specialty");
+                });
+
+            modelBuilder.Entity("Clinic.Models.Appointment", b =>
+                {
+                    b.HasOne("Clinic.Models.Doctor", "Doctor")
+                        .WithMany("Appointments")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Clinic.Models.Patient", "Patient")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Clinic.Models.DoctorSlot", "BookedSlot")
+                        .WithMany()
+                        .HasForeignKey("SlotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BookedSlot");
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
             modelBuilder.Entity("Clinic.Models.Auth.ApplicationRoleClaim", b =>
                 {
                     b.HasOne("Clinic.Models.Auth.ApplicationRole", "Role")
@@ -312,6 +480,36 @@ namespace Clinic.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Clinic.Models.Doctor", b =>
+                {
+                    b.HasOne("Clinic.Models.Auth.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Clinic.Models.Specialty", "Specialty")
+                        .WithMany("Doctors")
+                        .HasForeignKey("SpecialtyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Specialty");
+                });
+
+            modelBuilder.Entity("Clinic.Models.DoctorSlot", b =>
+                {
+                    b.HasOne("Clinic.Models.Doctor", "Doctor")
+                        .WithMany("AvailableSlots")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+                });
+
             modelBuilder.Entity("Clinic.Models.Auth.ApplicationRole", b =>
                 {
                     b.Navigation("RoleClaims");
@@ -328,6 +526,23 @@ namespace Clinic.Data.Migrations
                     b.Navigation("Tokens");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Clinic.Models.Doctor", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("AvailableSlots");
+                });
+
+            modelBuilder.Entity("Clinic.Models.Patient", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("Clinic.Models.Specialty", b =>
+                {
+                    b.Navigation("Doctors");
                 });
 #pragma warning restore 612, 618
         }

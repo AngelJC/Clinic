@@ -79,6 +79,40 @@ namespace Clinic.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Patient",
+                columns: table => new
+                {
+                    ApplicationUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Code = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patient", x => x.ApplicationUserId);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Specialty",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "varchar(2)", maxLength: 2, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreationDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Specialty", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Identity_RoleClaims",
                 columns: table => new
                 {
@@ -199,6 +233,122 @@ namespace Clinic.Data.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "Doctor",
+                columns: table => new
+                {
+                    ApplicationUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ProfessionalLicense = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SpecialtyId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doctor", x => x.ApplicationUserId);
+                    table.ForeignKey(
+                        name: "FK_Doctor_Identity_Users_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "Identity_Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Doctor_Specialty_SpecialtyId",
+                        column: x => x.SpecialtyId,
+                        principalTable: "Specialty",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "DoctorSlot",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    DoctorId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    StartTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsBooked = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DoctorSlot", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DoctorSlot_Doctor_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctor",
+                        principalColumn: "ApplicationUserId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Appointment",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    TrackingId = table.Column<string>(type: "varchar(25)", maxLength: 25, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AppointmentDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    PatientId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    DoctorId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SlotId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    ReasonForVisit = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AdministrativeNotes = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreationDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Appointment_DoctorSlot_SlotId",
+                        column: x => x.SlotId,
+                        principalTable: "DoctorSlot",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Appointment_Doctor_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctor",
+                        principalColumn: "ApplicationUserId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Appointment_Patient_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patient",
+                        principalColumn: "ApplicationUserId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_DoctorId",
+                table: "Appointment",
+                column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_PatientId",
+                table: "Appointment",
+                column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_SlotId",
+                table: "Appointment",
+                column: "SlotId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Doctor_SpecialtyId",
+                table: "Doctor",
+                column: "SpecialtyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoctorSlot_DoctorId",
+                table: "DoctorSlot",
+                column: "DoctorId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Identity_RoleClaims_RoleId",
                 table: "Identity_RoleClaims",
@@ -241,6 +391,9 @@ namespace Clinic.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Appointment");
+
+            migrationBuilder.DropTable(
                 name: "Identity_RoleClaims");
 
             migrationBuilder.DropTable(
@@ -256,10 +409,22 @@ namespace Clinic.Data.Migrations
                 name: "Identity_UserTokens");
 
             migrationBuilder.DropTable(
+                name: "DoctorSlot");
+
+            migrationBuilder.DropTable(
+                name: "Patient");
+
+            migrationBuilder.DropTable(
                 name: "Identity_Roles");
 
             migrationBuilder.DropTable(
+                name: "Doctor");
+
+            migrationBuilder.DropTable(
                 name: "Identity_Users");
+
+            migrationBuilder.DropTable(
+                name: "Specialty");
         }
     }
 }

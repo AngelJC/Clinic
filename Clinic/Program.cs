@@ -58,7 +58,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("Doctor", policy => policy.RequireRole("Doctor"))
-    .AddPolicy("Administrator", policy => policy.RequireRole("Administrator", "Sudo"));
+    .AddPolicy("Administrator", policy => policy.RequireRole("Sudo"));
 
 
 var defaultCulture = new CultureInfo("es-MX");
