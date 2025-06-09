@@ -79,21 +79,7 @@ namespace Clinic.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Patients",
-                columns: table => new
-                {
-                    ApplicationUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Code = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Patients", x => x.ApplicationUserId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Specialty",
+                name: "Specialties",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -108,7 +94,7 @@ namespace Clinic.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Specialty", x => x.Id);
+                    table.PrimaryKey("PK_Specialties", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -234,6 +220,27 @@ namespace Clinic.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Patients",
+                columns: table => new
+                {
+                    ApplicationUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Code = table.Column<ulong>(type: "bigint unsigned", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patients", x => x.ApplicationUserId);
+                    table.UniqueConstraint("AK_Patients_Code", x => x.Code);
+                    table.ForeignKey(
+                        name: "FK_Patients_Identity_Users_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "Identity_Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Doctors",
                 columns: table => new
                 {
@@ -252,9 +259,9 @@ namespace Clinic.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Doctors_Specialty_SpecialtyId",
+                        name: "FK_Doctors_Specialties_SpecialtyId",
                         column: x => x.SpecialtyId,
-                        principalTable: "Specialty",
+                        principalTable: "Specialties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -387,6 +394,12 @@ namespace Clinic.Data.Migrations
                 table: "Identity_Users",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patients_Code",
+                table: "Patients",
+                column: "Code",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -426,7 +439,7 @@ namespace Clinic.Data.Migrations
                 name: "Identity_Users");
 
             migrationBuilder.DropTable(
-                name: "Specialty");
+                name: "Specialties");
         }
     }
 }

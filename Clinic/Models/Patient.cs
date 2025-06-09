@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Clinic.Models.Auth;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Clinic.Models
 {
@@ -10,10 +12,15 @@ namespace Clinic.Models
     {
         [Key]
         public Guid ApplicationUserId { get; set; }
-        public string Code { get; set; } = string.Empty; // Unique code for the patient, e.g., "P1234"
+
+        [Display(Name = "Código")]
+        public ulong Code { get; set; }
 
         // Navigation property: A patient can have many appointments.
         public virtual ICollection<Appointment> Appointments { get; set; } = [];
+
+        [ForeignKey("ApplicationUserId")]
+        public ApplicationUser ApplicationUser { get; set; } = null!;
     }
 
 }

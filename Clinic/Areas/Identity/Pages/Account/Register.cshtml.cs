@@ -102,6 +102,12 @@ namespace Clinic.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    await _context.Patients.AddAsync(new Models.Patient
+                    {
+                        ApplicationUserId = user.Id,
+                    });
+                    await _context.SaveChangesAsync();
+
                     await _userManager.AddToRoleAsync(user, "Patient");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);

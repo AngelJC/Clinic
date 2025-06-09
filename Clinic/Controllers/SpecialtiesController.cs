@@ -19,7 +19,7 @@ namespace Clinic.Controllers
         // GET: Specialties
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Specialty.ToListAsync());
+            return View(await _context.Specialties.ToListAsync());
         }
 
         // GET: Specialties/Details/5
@@ -30,7 +30,7 @@ namespace Clinic.Controllers
                 return NotFound();
             }
 
-            var specialty = await _context.Specialty
+            var specialty = await _context.Specialties
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (specialty == null)
             {
@@ -74,7 +74,7 @@ namespace Clinic.Controllers
                 return NotFound();
             }
 
-            var specialty = await _context.Specialty.FindAsync(id);
+            var specialty = await _context.Specialties.FindAsync(id);
             if (specialty == null)
             {
                 return NotFound();
@@ -120,7 +120,7 @@ namespace Clinic.Controllers
 
         private bool SpecialtyExists(Guid id)
         {
-            return _context.Specialty.Any(e => e.Id == id);
+            return _context.Specialties.Any(e => e.Id == id);
         }
     }
 }

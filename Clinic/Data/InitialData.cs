@@ -1,4 +1,5 @@
-﻿using Clinic.Models.Auth;
+﻿using Clinic.Models;
+using Clinic.Models.Auth;
 using Clinic.Models.Catalogs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -133,30 +134,18 @@ namespace Clinic.Data
         public static async Task AddInitialCatalogs(ApplicationDbContext context)
         {
             var now = DateTime.Now;
-            
-            //if (!await context.Colors.AnyAsync())
-            //{
-            //    string p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExtraFiles", "Colors.csv");
-            //    if (File.Exists(p))
-            //    {
-            //        var records = CSVRecords.GetColors(p);
-            //        if (records != null)
-            //        {
-            //            List<Color> colors = [];
-            //            foreach (var item in records)
-            //            {
-            //                colors.Add(new Color
-            //                {
-            //                    CreationDate = now,
-            //                    Text = item.Name,
-            //                    HexColor = item.Color
-            //                });
-            //            }
-            //            await context.AddRangeAsync(colors);
-            //            await context.SaveChangesAsync();
-            //        }
-            //    }
-            //}
+
+            if (!await context.Specialties.AnyAsync())
+            {
+                await context.Specialties.AddRangeAsync(new List<Specialty> 
+                { 
+                    new() { CreationDate = now, Code = "CR", Name = "Cardiología", Description = "Área de Cardiología", Status = StatusCore.Active },
+                    new() { CreationDate = now, Code = "CG", Name = "Cirugía General", Description = "Área de Cirugía General", Status = StatusCore.Active },
+                    new() { CreationDate = now, Code = "OR", Name = "Otorrinolaringología", Description = "Área de Otorrinolaringología", Status = StatusCore.Active },
+                    new() { CreationDate = now, Code = "OT", Name = "Ortopedia y Traumatología", Description = "Área de Ortopedia y Traumatología", Status = StatusCore.Active },
+               });
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

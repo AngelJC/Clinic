@@ -69,6 +69,7 @@ namespace Clinic.Models
         /// <returns>Una lista de objetos 'DoctorSlot', cada uno representando una cita potencial.</returns>
         public static List<DoctorSlot> GenerateSlots(Guid doctorId, DateTime rangeStart, DateTime rangeEnd, int slotDurationInMinutes = 20)
         {
+            var creationDate = DateTime.Now;
             var slots = new List<DoctorSlot>();
 
             // Se normalizan los segundos y milisegundos para evitar problemas de precisión.
@@ -87,7 +88,7 @@ namespace Clinic.Models
 
                 var newSlot = new DoctorSlot
                 {
-                    Id = Guid.NewGuid(), // Generamos un nuevo ID para el slot.
+                    CreationDate = creationDate,
                     DoctorId = doctorId,
                     StartTime = currentSlotStart,
                     EndTime = currentSlotEnd,

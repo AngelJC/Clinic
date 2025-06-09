@@ -99,6 +99,15 @@ namespace Clinic.Data
                 b.ToTable("Identity_UserRoles");
             });
 
+            modelBuilder.Entity<Patient>(b =>
+            {
+                b.Property(x => x.Code)
+                    .ValueGeneratedOnAdd();
+                b.HasAlternateKey(x => x.Code);
+                b.HasIndex(x => x.Code)
+                    .IsUnique();
+            });
+
             // For all decimal properties
             foreach (var property in modelBuilder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetProperties())
@@ -108,7 +117,7 @@ namespace Clinic.Data
                 property.SetScale(2);
             }
         }
-        public DbSet<Specialty> Specialty { get; set; } = default!;
+        public DbSet<Specialty> Specialties { get; set; } = default!;
         public DbSet<Doctor> Doctors { get; set; } = default!;
         public DbSet<Patient> Patients { get; set; } = default!;
         public DbSet<Appointment> Appointments { get; set; } = default!;

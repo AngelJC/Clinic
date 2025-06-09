@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinic.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250608190355_Initial")]
+    [Migration("20250609002050_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -352,14 +352,20 @@ namespace Clinic.Data.Migrations
             modelBuilder.Entity("Clinic.Models.Patient", b =>
                 {
                     b.Property<Guid>("ApplicationUserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<ulong>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint unsigned");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Code"));
 
                     b.HasKey("ApplicationUserId");
+
+                    b.HasAlternateKey("Code");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
 
                     b.ToTable("Patients");
                 });
@@ -393,7 +399,7 @@ namespace Clinic.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specialty");
+                    b.ToTable("Specialties");
                 });
 
             modelBuilder.Entity("Clinic.Models.Appointment", b =>
@@ -514,6 +520,17 @@ namespace Clinic.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Doctor");
+                });
+
+            modelBuilder.Entity("Clinic.Models.Patient", b =>
+                {
+                    b.HasOne("Clinic.Models.Auth.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Clinic.Models.Auth.ApplicationRole", b =>

@@ -62,7 +62,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("Doctor", policy => policy.RequireRole("Doctor"))
+    .AddPolicy("Doctors", policy => policy.RequireRole("Doctor"))
     .AddPolicy("Administrator", policy => policy.RequireRole("Sudo"));
 
 

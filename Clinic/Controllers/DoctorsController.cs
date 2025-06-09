@@ -42,7 +42,7 @@ namespace Clinic.Controllers
         // GET: Doctos/Create
         public async Task<IActionResult> Create()
         {
-            var specialties = await _context.Specialty.AsNoTracking().Select(x => new
+            var specialties = await _context.Specialties.AsNoTracking().Select(x => new
             {
                 x.Id,
                 x.Name,
@@ -90,7 +90,7 @@ namespace Clinic.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            var specialties = await _context.Specialty.AsNoTracking().Select(x => new
+            var specialties = await _context.Specialties.AsNoTracking().Select(x => new
             {
                 x.Id,
                 x.Name,
@@ -125,7 +125,7 @@ namespace Clinic.Controllers
             {
                 return NotFound();
             }
-            var specialties = await _context.Specialty.AsNoTracking().Select(x => new
+            var specialties = await _context.Specialties.AsNoTracking().Select(x => new
             {
                 x.Id,
                 x.Name,
@@ -184,7 +184,7 @@ namespace Clinic.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var specialties = await _context.Specialty.AsNoTracking().Select(x => new
+            var specialties = await _context.Specialties.AsNoTracking().Select(x => new
             {
                 x.Id,
                 x.Name,
