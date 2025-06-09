@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Clinic.Controllers
 {
@@ -99,8 +100,10 @@ namespace Clinic.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind] AppointmentCreate appointment)
+        public async Task<IActionResult> Create([Bind] AppointmentCreate appointment, [FromServices] IOptions<ClientOptions> options)
         {
+            var opt = options.Value;
+
             if (ModelState.IsValid)
             {
                 var speciality = await _context.Specialties.FindAsync(appointment.SpecialtyId);
@@ -126,7 +129,7 @@ namespace Clinic.Controllers
                 }
                 var model = new Appointment
                 {
-                    TrackingId = $"LUX-{DateTime.Now:yyyyMMdd}-{speciality.Code}-{patient.Code:D4}",
+                    TrackingId = $"{opt.Acronym}-{DateTime.Now:yyyyMMdd}-{speciality.Code}-{patient.Code:D4}",
                     PatientId = GetUserId,
                     DoctorId = appointment.DoctorId,
                     SlotId = appointment.SlotId,
