@@ -32,9 +32,6 @@ namespace Clinic.Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("AppointmentDateTime")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime(6)");
 

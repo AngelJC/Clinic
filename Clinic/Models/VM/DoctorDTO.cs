@@ -1,7 +1,7 @@
 ﻿using Clinic.Models.Catalogs;
 using System.ComponentModel.DataAnnotations;
 
-namespace Clinic.Models.Auth
+namespace Clinic.Models.VM
 {
     public class DoctorCreate
     {

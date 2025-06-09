@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinic.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250609002050_Initial")]
+    [Migration("20250609014845_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -34,9 +34,6 @@ namespace Clinic.Data.Migrations
                     b.Property<string>("AdministrativeNotes")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime>("AppointmentDateTime")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime(6)");

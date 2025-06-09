@@ -11,19 +11,10 @@ namespace Clinic.Models
     /// </summary>
     public class Appointment : BaseEntity
     {
-        /// <summary>
-        /// Unique tracking number for the appointment.
-        /// Generated upon creation.
-        /// </summary>
+
         [Required]
         [StringLength(25)] // E.g., LUX-20240925-A1B1234 // LUX-YYYYMMDD-[Speciality, 2][PatientCode, 5]
         public string TrackingId { get; set; } = string.Empty;
-
-        /// <summary>
-        /// The exact date and time of the appointment, taken from the booked slot.
-        /// </summary>
-        [Required]
-        public DateTime AppointmentDateTime { get; set; }
 
         [Required]
         public Guid PatientId { get; set; }

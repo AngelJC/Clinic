@@ -2,6 +2,7 @@
 using Clinic.Models;
 using Clinic.Models.Auth;
 using Clinic.Models.Catalogs;
+using Clinic.Models.VM;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

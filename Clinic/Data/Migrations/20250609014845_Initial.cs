@@ -298,7 +298,6 @@ namespace Clinic.Data.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     TrackingId = table.Column<string>(type: "varchar(25)", maxLength: 25, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    AppointmentDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     PatientId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     DoctorId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     SlotId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
